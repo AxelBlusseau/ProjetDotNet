@@ -17,6 +17,7 @@ namespace APIdotNet
         {
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
             services.AddSingleton<Services.IUserService, Services.UserService>();
+            services.AddSingleton<Services.IExcuseService, Services.ExcuseService>();
 
         }
 

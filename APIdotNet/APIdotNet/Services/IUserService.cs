@@ -1,8 +1,8 @@
-﻿using System;
+﻿using APIdotNet.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using APIdotNet.Models;
 
 namespace APIdotNet.Services
 {

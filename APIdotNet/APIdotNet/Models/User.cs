@@ -8,9 +8,9 @@ namespace APIdotNet.Models
     public class User
     {
         public int Id { get; set; }
-        public string Nom { get; set; }
-        public string Prenom { get; set; }
-        public string Mail { get; set; }
+        public string LastName { get; set; }
+        public string FirstName { get; set; }
+        public string Grade { get; set; }
 
     }
 }
