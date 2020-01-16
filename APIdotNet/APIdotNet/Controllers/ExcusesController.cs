@@ -34,6 +34,15 @@ namespace APIdotNet.Controllers
             return items;
         }
 
+        [HttpGet]
+        [Route("TopItByYear")]
+        public IQueryable<Excuse> GetTopExcuseByYear()
+        {
+            IQueryable<Excuse> excuses = db.Excuses.Include("User");
+            var items = excuses.Where(e => e.Date.Year == DateTime.Now.Year).OrderByDescending(v => v.NbVote).Take(2);
+            return items;
+        }
+
         // GET: api/Excuses
         public IQueryable<Excuse> GetExcuses()
         {
