@@ -17,6 +17,23 @@ namespace APIdotNet.Controllers
     {
         private APIdotNetContext db = new APIdotNetContext();
 
+        [HttpGet]
+        [Route("GetTen")]
+        public IQueryable<Excuse> GetTen()
+        {
+            IQueryable<Excuse> excuses = db.Excuses.Include("User");
+            var items = excuses.OrderByDescending(e => e.NbVote).Take(10);
+            return items;
+        }
+        [HttpGet]
+        [Route("TopItByMonth")]
+        public IQueryable<Excuse> GetTopExcuseByMonth()
+        {
+            IQueryable<Excuse> excuses = db.Excuses.Include("User");
+            var items = excuses.Where(e => e.Date.Month == DateTime.Now.Month).OrderByDescending(v => v.NbVote).Take(2);
+            return items;
+        }
+
         // GET: api/Excuses
         public IQueryable<Excuse> GetExcuses()
         {
