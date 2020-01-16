@@ -11,7 +11,8 @@ namespace APIdotNet.Models
         public string Reason { get; set; }
         public DateTime Date { get; set; }
         public string Image { get; set; }
-        public int UserId { get; set; }
+        public int UserID { get; set; }
+        public User User { get; set; }
         public int NbVote { get; set; }
     }
 }
