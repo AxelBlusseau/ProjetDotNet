@@ -115,10 +115,6 @@ namespace APIdotNet.Controllers
         {
             return db.Users.Count(e => e.Id == id) > 0;
         }
-        // GET: api/ten 
-        public IQueryable<User> GetTenUsers()
-        {
-            return db.Users.Take(2);
-        }
+        
     }
 }
