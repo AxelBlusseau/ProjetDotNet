@@ -1,0 +1,110 @@
+﻿@page "/"
+@using FrontBlazor.Data
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <h1>Dernières excuses</h1>
+        </div>
+        <div class="col text-right">
+            <div class="btn-group" role="group">
+                <button type="button" @onclick="GetTopTen" class="btn btn-light">Top 10</button>
+                <button type="button" @onclick="GetTopHitByYear" class="btn btn-light">Top de cette année</button>
+                <button type="button" @onclick="GetTopHitByMonth" class="btn btn-light">Top de ce mois</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        @if (excuseList == null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+            @foreach (var forecast in excuseList)
+            {
+                <div class="col-sm">
+                    <div class="card" style="width: 18rem; margin-bottom:2%">
+                        <img src="https://cdn-media.rtl.fr/cache/1b3r1m7GfTVVdVrw28ecxw/880v587-0/online/image/2019/0109/7796170623_l-actrice-margot-robbie-aux-oscars-en-mars-2018.jpg" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text">@forecast.Reason</p>
+                            <div class="text-right">
+                                <footer class="blockquote-footer">@Convert.ToDateTime(@forecast.Date).ToString("dd/MM/yyyy")</footer>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <span style="color:cornflowerblue;">
+                                <i class="fab fa-readme"></i>
+                            </span>
+                            @if (voteList.Exists(v => (v.idExcuse == forecast.Id && v.idUser == 1)) || forecast.Voted) //A CHANGER
+                            {
+                                <span style="color:limegreen;">
+                                    <i class="fas fa-heart"></i>
+                                </span>
+                            }
+                            else
+                            {
+                                    <span style="color:orangered;">
+                                        <i @onclick="(() => addVote(forecast))" class="fas fa-heart"></i>
+                                    </span>
+                            }
+                            <span>@forecast.NbVote</span>
+                        </div>
+                    </div>
+                </div>
+                }
+             }
+        </div>
+    </div>
+
+@code {
+    public Excuse excuse { get; set; }
+    public Vote vote{ get; set; }
+    public List<Excuse> excuseList { get; set; }
+    public List<Vote> voteList{ get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        ExcuseService _excuseService = new ExcuseService();
+        VoteService _voteService = new VoteService();
+        voteList = await Task.Run(() => _voteService.GetVotes());
+        excuseList = await Task.Run(() => _excuseService.GetExcuses());
+    }
+
+    public async void GetTopTen()
+    {
+         ExcuseService _excuseService = new ExcuseService();
+         excuseList = await Task.Run(() => _excuseService.GetTopTen());
+    }    
+    
+    public async void GetTopHitByMonth()
+    {
+         ExcuseService _excuseService = new ExcuseService();
+         excuseList = await Task.Run(() => _excuseService.GetTopHitByMonth());
+    }    
+    
+    public async void GetTopHitByYear()
+    {
+         ExcuseService _excuseService = new ExcuseService();
+         excuseList = await Task.Run(() => _excuseService.GetTopHitByMonth());
+    }
+
+    public void addVote(Excuse excuse)
+    {
+        VoteService _voteService = new VoteService();
+        Vote newVote = new Vote();
+        newVote.idExcuse = excuse.Id;
+        newVote.idUser = 1;
+        _voteService.AddVote(newVote);
+
+        //+1 au nombre de vote actuel
+        excuseList.First(e => e.Id == excuse.Id).NbVote++;
+
+        //On change la couleur du coeur
+        excuseList.First(e => e.Id == excuse.Id).Voted = true;
+
+    }
+}
