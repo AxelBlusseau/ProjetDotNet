@@ -18,7 +18,7 @@ namespace APIdotNet.Controllers
         private APIdotNetContext db = new APIdotNetContext();
 
         [HttpGet]
-        [Route("GetTen")]
+        [Route("api/GetTopTen")]
         public IQueryable<Excuse> GetTen()
         {
             IQueryable<Excuse> excuses = db.Excuses.Include("User");
@@ -26,7 +26,7 @@ namespace APIdotNet.Controllers
             return items;
         }
         [HttpGet]
-        [Route("TopItByMonth")]
+        [Route("api/TopHitByMonth")]
         public IQueryable<Excuse> GetTopExcuseByMonth()
         {
             IQueryable<Excuse> excuses = db.Excuses.Include("User");
@@ -35,7 +35,7 @@ namespace APIdotNet.Controllers
         }
 
         [HttpGet]
-        [Route("TopItByYear")]
+        [Route("api/TopHitByYear")]
         public IQueryable<Excuse> GetTopExcuseByYear()
         {
             IQueryable<Excuse> excuses = db.Excuses.Include("User");
@@ -101,11 +101,11 @@ namespace APIdotNet.Controllers
         [ResponseType(typeof(Excuse))]
         public async Task<IHttpActionResult> PostExcuse(Excuse excuse)
         {
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
             db.Excuses.Add(excuse);
             await db.SaveChangesAsync();
 

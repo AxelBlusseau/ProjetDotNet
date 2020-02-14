@@ -3,19 +3,45 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
+using System.Security.Principal;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using APIdotNet.Models;
+using Microsoft.IdentityModel.Tokens;
 
 namespace APIdotNet.Controllers
 {
     public class UsersController : ApiController
     {
         private APIdotNetContext db = new APIdotNetContext();
+        
+
+        [HttpPost]
+        [Route("api/login")]
+        public Object Login(UserInfo userInfo)
+        {
+            var userLogin = db.Users.Where(u => u.Mail == userInfo.Mail);
+            var user = userLogin.Where(u => u.Password == userInfo.Password);
+            if (user.Count() == 0)
+            {
+                return "Utilisateur inconnu";
+            }
+            else
+            {
+                var resp = new UserId(user.First().Id);
+                return resp;
+                    
+            }
+
+        }
+
 
         // GET: api/Users
         public IQueryable<User> GetUsers()
@@ -28,6 +54,7 @@ namespace APIdotNet.Controllers
         public async Task<IHttpActionResult> GetUser(int id)
         {
             User user = await db.Users.FindAsync(id);
+
             if (user == null)
             {
                 return NotFound();
