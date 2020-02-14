@@ -7,13 +7,13 @@ namespace APIdotNet.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class VoteController : IMigrationMetadata
+    public sealed partial class bytesintab : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(VoteController));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(bytesintab));
         
         string IMigrationMetadata.Id
         {
-            get { return "202001161258151_VoteController"; }
+            get { return "202002141102523_bytes in tab"; }
         }
         
         string IMigrationMetadata.Source
