@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using FrontBlazor.Areas.Identity;
 using FrontBlazor.Data;
+using Blazor.FileReader;
 
 namespace FrontBlazor
 {
@@ -39,10 +40,14 @@ namespace FrontBlazor
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-            services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<UserService>();
             services.AddSingleton<ExcuseService>();
             services.AddSingleton<VoteService>();
+            services.AddFileReaderService();
+            services.AddServerSideBlazor().AddHubOptions(o =>
+            {
+                o.MaximumReceiveMessageSize = 10 * 1024 * 1024; // 10MB
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -15,6 +15,7 @@
         </div>
     </div>
 </div>
+
 <div class="container">
     <div class="row">
         @if (excuseList == null)
@@ -27,16 +28,31 @@
             {
                 <div class="col-sm">
                     <div class="card" style="width: 18rem; margin-bottom:2%">
-                        <img src="https://cdn-media.rtl.fr/cache/1b3r1m7GfTVVdVrw28ecxw/880v587-0/online/image/2019/0109/7796170623_l-actrice-margot-robbie-aux-oscars-en-mars-2018.jpg" class="card-img-top" alt="...">
-                        <div class="card-body">
+                        @if (forecast.Image != null)
+                        {
+                            <img src="data:image/bmp;base64, @forecast.Image" class="card-img-top" width="100" height="250" alt="...">
+                        }
+                        else
+                        {
+                            <img src="https://i.pinimg.com/originals/20/e9/cb/20e9cb9c757f7021efd945cc7c8d680a.jpg" width="100" height="250" class="card-img-top" alt="...">
+                        }
+
+                    <div class="card-body">
+                        @if (forecast.Reason.Length > 25)
+                        {
+                            <p class="card-text">@Convert.ToString(@forecast.Reason).Substring(0, 25)...</p>
+                        }
+                        else
+                        {
                             <p class="card-text">@forecast.Reason</p>
-                            <div class="text-right">
-                                <footer class="blockquote-footer">@Convert.ToDateTime(@forecast.Date).ToString("dd/MM/yyyy")</footer>
-                            </div>
+                        }
+                        <div class="text-right">
+                            <footer class="blockquote-footer">@Convert.ToDateTime(@forecast.Date).ToString("dd/MM/yyyy")</footer>
                         </div>
+                    </div>
                         <div class="card-footer">
                             <span style="color:cornflowerblue;">
-                                <i class="fab fa-readme"></i>
+                                <i class="fab fa-readme" @onclick="(() => feedModal(forecast.Reason))" data-toggle="modal" data-target="#description"></i>
                             </span>
                             @if (voteList.Exists(v => (v.idExcuse == forecast.Id && v.idUser == 1)) || forecast.Voted) //A CHANGER
                             {
@@ -46,25 +62,45 @@
                             }
                             else
                             {
-                                    <span style="color:orangered;">
-                                        <i @onclick="(() => addVote(forecast))" class="fas fa-heart"></i>
-                                    </span>
+                                <span style="color:orangered;">
+                                    <i @onclick="(() => addVote(forecast))" class="fas fa-heart"></i>
+                                </span>
                             }
                             <span>@forecast.NbVote</span>
                         </div>
                     </div>
                 </div>
-                }
-             }
+            }
+        }
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="description" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Raison</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @description
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
         </div>
     </div>
+</div>
 
 @code {
     public Excuse excuse { get; set; }
-    public Vote vote{ get; set; }
+    public Vote vote { get; set; }
     public List<Excuse> excuseList { get; set; }
-    public List<Vote> voteList{ get; set; }
-
+    public List<Vote> voteList { get; set; }
+    public String description { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -74,22 +110,26 @@
         excuseList = await Task.Run(() => _excuseService.GetExcuses());
     }
 
+    public void feedModal(String reason) {
+        description = reason;
+    }
+
     public async void GetTopTen()
     {
-         ExcuseService _excuseService = new ExcuseService();
-         excuseList = await Task.Run(() => _excuseService.GetTopTen());
-    }    
-    
+        ExcuseService _excuseService = new ExcuseService();
+        excuseList = await Task.Run(() => _excuseService.GetTopTen());
+    }
+
     public async void GetTopHitByMonth()
     {
-         ExcuseService _excuseService = new ExcuseService();
-         excuseList = await Task.Run(() => _excuseService.GetTopHitByMonth());
-    }    
-    
+        ExcuseService _excuseService = new ExcuseService();
+        excuseList = await Task.Run(() => _excuseService.GetTopHitByMonth());
+    }
+
     public async void GetTopHitByYear()
     {
-         ExcuseService _excuseService = new ExcuseService();
-         excuseList = await Task.Run(() => _excuseService.GetTopHitByMonth());
+        ExcuseService _excuseService = new ExcuseService();
+        excuseList = await Task.Run(() => _excuseService.GetTopHitByYear());
     }
 
     public void addVote(Excuse excuse)

@@ -27,21 +27,21 @@ namespace FrontBlazor.Data
         {
             var _client = new HttpClient();
 
-            Excuses = await _client.GetJsonAsync<List<Excuse>>("http://localhost:52349/GetTen");
+            Excuses = await _client.GetJsonAsync<List<Excuse>>("http://localhost:52349/api/GetTopTen");
             return await Task.FromResult(Excuses);
         }        
         public async Task<List<Excuse>> GetTopHitByMonth()
         {
             var _client = new HttpClient();
 
-            Excuses = await _client.GetJsonAsync<List<Excuse>>("http://localhost:52349/TopItByMonth");
+            Excuses = await _client.GetJsonAsync<List<Excuse>>("http://localhost:52349/api/TopHitByMonth");
             return await Task.FromResult(Excuses);
         }        
         public async Task<List<Excuse>> GetTopHitByYear()
         {
             var _client = new HttpClient();
 
-            Excuses = await _client.GetJsonAsync<List<Excuse>>("http://localhost:52349/TopItByYear");
+            Excuses = await _client.GetJsonAsync<List<Excuse>>("http://localhost:52349/api/TopHitByYear");
             return await Task.FromResult(Excuses);
         }
         public async void AddExcuse(Excuse excuse)

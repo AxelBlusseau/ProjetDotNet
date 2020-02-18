@@ -212,6 +212,10 @@
     <Compile Include="Migrations\202002141102523_bytes in tab.Designer.cs">
       <DependentUpon>202002141102523_bytes in tab.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202002161821013_Update Image.cs" />
+    <Compile Include="Migrations\202002161821013_Update Image.Designer.cs">
+      <DependentUpon>202002161821013_Update Image.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\APIdotNetContext.cs" />
     <Compile Include="Models\Excuse.cs" />
@@ -330,6 +334,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202002141102523_bytes in tab.resx">
       <DependentUpon>202002141102523_bytes in tab.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002161821013_Update Image.resx">
+      <DependentUpon>202002161821013_Update Image.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -305,3 +305,14 @@ C:\Users\Axel8\Documents\EPSI\B3\DotNet\ProjetDotNet\APIdotNet\APIdotNet\obj\Deb
 C:\Users\Axel8\Documents\EPSI\B3\DotNet\ProjetDotNet\APIdotNet\APIdotNet\obj\Debug\APIdotNet.csproj.CopyComplete
 C:\Users\Axel8\Documents\EPSI\B3\DotNet\ProjetDotNet\APIdotNet\APIdotNet\obj\Debug\APIdotNet.dll
 C:\Users\Axel8\Documents\EPSI\B3\DotNet\ProjetDotNet\APIdotNet\APIdotNet\obj\Debug\APIdotNet.pdb
+C:\Users\Axel8\Documents\EPSI\B3\DotNet\ProjetDotNet\APIdotNet\APIdotNet\bin\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\Axel8\Documents\EPSI\B3\DotNet\ProjetDotNet\APIdotNet\APIdotNet\bin\Microsoft.IdentityModel.Logging.dll
+C:\Users\Axel8\Documents\EPSI\B3\DotNet\ProjetDotNet\APIdotNet\APIdotNet\bin\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Axel8\Documents\EPSI\B3\DotNet\ProjetDotNet\APIdotNet\APIdotNet\bin\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Axel8\Documents\EPSI\B3\DotNet\ProjetDotNet\APIdotNet\APIdotNet\bin\Microsoft.IdentityModel.JsonWebTokens.xml
+C:\Users\Axel8\Documents\EPSI\B3\DotNet\ProjetDotNet\APIdotNet\APIdotNet\bin\Microsoft.IdentityModel.Logging.xml
+C:\Users\Axel8\Documents\EPSI\B3\DotNet\ProjetDotNet\APIdotNet\APIdotNet\bin\Microsoft.IdentityModel.Tokens.xml
+C:\Users\Axel8\Documents\EPSI\B3\DotNet\ProjetDotNet\APIdotNet\APIdotNet\bin\System.IdentityModel.Tokens.Jwt.xml
+C:\Users\Axel8\Documents\EPSI\B3\DotNet\ProjetDotNet\APIdotNet\APIdotNet\obj\Debug\APIdotNet.Migrations._return.resources
+C:\Users\Axel8\Documents\EPSI\B3\DotNet\ProjetDotNet\APIdotNet\APIdotNet\obj\Debug\APIdotNet.Migrations.bytesintab.resources
+C:\Users\Axel8\Documents\EPSI\B3\DotNet\ProjetDotNet\APIdotNet\APIdotNet\obj\Debug\APIdotNet.Migrations.UpdateImage.resources
