@@ -5,13 +5,14 @@ using System.Web;
 
 namespace APIdotNet.Models
 {
-    public class UserId
+    public class UserResponse
     {
         public int Id { get; set; }
-
-        public UserId(int id)
+        public string Error { get; set; }
+        public UserResponse(int id, string error)
         {
             this.Id = id;
+            this.Error = error;
         }
     }
 }

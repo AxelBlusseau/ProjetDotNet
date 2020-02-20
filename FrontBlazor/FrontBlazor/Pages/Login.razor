@@ -1,0 +1,85 @@
+﻿@page "/"
+@using FrontBlazor.Data
+@using Microsoft.AspNetCore.ProtectedBrowserStorage;
+@inject ProtectedSessionStorage ProtectedSessionStore
+@inject NavigationManager NavigationManager
+
+<section class="testimonial py-5" id="testimonial">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 py-5 bg-primary text-white text-center ">
+                <div class=" ">
+                    <div class="card-body">
+                        <img src="http://www.ansonika.com/mavia/img/registration_bg.svg" style="width:30%">
+                        <h2 class="py-3">Connexion</h2>
+                        <p>
+                            Cette application regroupe les meilleurs excuses de retard de ton campus, connecte toi pour pouvoir rédiger toi même tes excuses et voter pour tes préférées !
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 py-5">
+                <div class="h-100">
+                    <h4 class="pb-4">Merci de remplir ce formulaire</h4>
+                    <form>
+                        <EditForm Model="@user" OnValidSubmit="CheckUser">
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <input class="form-control" type="email" @bind="user.Mail" required placeholder="Mail" />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <input type="password" class="form-control" @bind="user.Password" required placeholder="Mot de passe" />
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <input type="submit" class="btn btn-primary" value="Se connecter" />
+                            </div>
+                        </EditForm>
+
+                        @if (@error)
+                        {
+                            <div style="margin-top:6px" class="alert alert-danger" role="alert">
+                                Aucun utilisateur trouvé
+                            </div>
+                        }
+                    </form>
+                </div>
+
+                <div>
+                    <a href="/register" style="position:absolute; bottom: 0; right: 20px;" class="btn btn-primary">S'inscrire</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@code {
+    public User user { get; set; }
+    public bool error { get; set; }
+
+    private async void CheckUser()
+    {
+        UserService _userService = new UserService();
+        User result = await Task.Run(() => _userService.CheckUser(user));
+        if (result.Id == 0)
+        {
+            error = true;
+
+            StateHasChanged();
+        }
+        else
+        {
+            await ProtectedSessionStore.SetAsync("id", result.Id);
+            NavigationManager.NavigateTo("/home");
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        user = new User();
+    }
+
+}

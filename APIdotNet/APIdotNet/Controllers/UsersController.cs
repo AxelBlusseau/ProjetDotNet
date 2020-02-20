@@ -23,23 +23,38 @@ namespace APIdotNet.Controllers
         private APIdotNetContext db = new APIdotNetContext();
         
 
-        [HttpPost]
+        [HttpGet]
         [Route("api/login")]
-        public Object Login(UserInfo userInfo)
+        public Object Login()
         {
-            var userLogin = db.Users.Where(u => u.Mail == userInfo.Mail);
-            var user = userLogin.Where(u => u.Password == userInfo.Password);
-            if (user.Count() == 0)
+            var re = Request;
+            var headers = re.Headers;
+
+            if (headers.Contains("Authorization"))
             {
-                return "Utilisateur inconnu";
+                string ba = headers.GetValues("Authorization").First();
+                string userInfos = ba.Split(' ')[1];
+                string mail = userInfos.Split(':')[0];
+                string pwd = userInfos.Split(':')[1];
+
+                var userLogin = db.Users.Where(u => u.Mail == mail);
+                var user = userLogin.Where(u => u.Password == pwd);
+                if (user.Count() == 0)
+                {
+                    var resp = new UserResponse(0, "Utilisateur inconnu");
+                    return resp;
+                }
+                else
+                {
+                    var resp = new UserResponse(user.First().Id, "");
+                    return resp;
+                }
             }
             else
             {
-                var resp = new UserId(user.First().Id);
+                var resp = new UserResponse(0, "Utilisateur inconnu");
                 return resp;
-                    
-            }
-
+            }            
         }
 
 

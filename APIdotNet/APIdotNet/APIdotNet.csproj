@@ -220,7 +220,7 @@
     <Compile Include="Models\APIdotNetContext.cs" />
     <Compile Include="Models\Excuse.cs" />
     <Compile Include="Models\User.cs" />
-    <Compile Include="Models\UserId.cs" />
+    <Compile Include="Models\UserResponse.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Models\Vote.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

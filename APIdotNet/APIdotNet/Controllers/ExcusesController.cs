@@ -30,7 +30,7 @@ namespace APIdotNet.Controllers
         public IQueryable<Excuse> GetTopExcuseByMonth()
         {
             IQueryable<Excuse> excuses = db.Excuses.Include("User");
-            var items = excuses.Where(e => e.Date.Month == DateTime.Now.Month).OrderByDescending(v => v.NbVote).Take(2);
+            var items = excuses.Where(e => e.Date.Month == DateTime.Now.Month).OrderByDescending(v => v.NbVote).Take(10);
             return items;
         }
 
@@ -39,7 +39,7 @@ namespace APIdotNet.Controllers
         public IQueryable<Excuse> GetTopExcuseByYear()
         {
             IQueryable<Excuse> excuses = db.Excuses.Include("User");
-            var items = excuses.Where(e => e.Date.Year == DateTime.Now.Year).OrderByDescending(v => v.NbVote).Take(2);
+            var items = excuses.Where(e => e.Date.Year == DateTime.Now.Year).OrderByDescending(v => v.NbVote).Take(10);
             return items;
         }
 

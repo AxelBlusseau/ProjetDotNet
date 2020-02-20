@@ -1,5 +1,10 @@
-﻿@page "/"
+﻿@page "/home"
 @using FrontBlazor.Data
+@using Microsoft.AspNetCore.ProtectedBrowserStorage;
+@inject ProtectedSessionStorage ProtectedSessionStore
+@inject NavigationManager NavigationManager
+
+<NavMenu />
 
 <div class="container-fluid">
     <div class="row">
@@ -20,15 +25,19 @@
     <div class="row">
         @if (excuseList == null)
         {
-            <p><em>Loading...</em></p>
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
         }
         else
         {
             @foreach (var forecast in excuseList)
             {
-                <div class="col-sm">
-                    <div class="card" style="width: 18rem; margin-bottom:2%">
-                        @if (forecast.Image != null)
+                <div class="col-4">
+                    <div class="card" style="width: 18rem; margin-bottom:5px;">
+                        @if (forecast.Image != "")
                         {
                             <img src="data:image/bmp;base64, @forecast.Image" class="card-img-top" width="100" height="250" alt="...">
                         }
@@ -37,24 +46,24 @@
                             <img src="https://i.pinimg.com/originals/20/e9/cb/20e9cb9c757f7021efd945cc7c8d680a.jpg" width="100" height="250" class="card-img-top" alt="...">
                         }
 
-                    <div class="card-body">
-                        @if (forecast.Reason.Length > 25)
-                        {
-                            <p class="card-text">@Convert.ToString(@forecast.Reason).Substring(0, 25)...</p>
-                        }
-                        else
-                        {
-                            <p class="card-text">@forecast.Reason</p>
-                        }
-                        <div class="text-right">
-                            <footer class="blockquote-footer">@Convert.ToDateTime(@forecast.Date).ToString("dd/MM/yyyy")</footer>
+                        <div class="card-body">
+                            @if (forecast.Reason.Length > 25)
+                            {
+                                <p class="card-text">@Convert.ToString(@forecast.Reason).Substring(0, 25)...</p>
+                            }
+                            else
+                            {
+                                <p class="card-text">@forecast.Reason</p>
+                            }
+                            <div class="text-right">
+                                <footer class="blockquote-footer">@Convert.ToDateTime(@forecast.Date).ToString("dd/MM/yyyy")</footer>
+                            </div>
                         </div>
-                    </div>
                         <div class="card-footer">
                             <span style="color:cornflowerblue;">
                                 <i class="fab fa-readme" @onclick="(() => feedModal(forecast.Reason))" data-toggle="modal" data-target="#description"></i>
                             </span>
-                            @if (voteList.Exists(v => (v.idExcuse == forecast.Id && v.idUser == 1)) || forecast.Voted) //A CHANGER
+                            @if (voteList.Exists(v => (v.idExcuse == forecast.Id && v.idUser == _currentUserId)) || forecast.Voted)
                             {
                                 <span style="color:limegreen;">
                                     <i class="fas fa-heart"></i>
@@ -101,16 +110,29 @@
     public List<Excuse> excuseList { get; set; }
     public List<Vote> voteList { get; set; }
     public String description { get; set; }
+    public int _currentUserId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        ExcuseService _excuseService = new ExcuseService();
-        VoteService _voteService = new VoteService();
-        voteList = await Task.Run(() => _voteService.GetVotes());
-        excuseList = await Task.Run(() => _excuseService.GetExcuses());
+        //Permission
+        _currentUserId = await ProtectedSessionStore.GetAsync<int>("id");
+        if (_currentUserId == 0)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            ExcuseService _excuseService = new ExcuseService();
+            VoteService _voteService = new VoteService();
+            voteList = await Task.Run(() => _voteService.GetVotes());
+            excuseList = await Task.Run(() => _excuseService.GetExcuses());
+            //On inverse les valeurs de la liste pour obtenir les dernières excuses
+            excuseList.Reverse();
+        }
     }
 
-    public void feedModal(String reason) {
+    public void feedModal(String reason)
+    {
         description = reason;
     }
 
@@ -118,18 +140,24 @@
     {
         ExcuseService _excuseService = new ExcuseService();
         excuseList = await Task.Run(() => _excuseService.GetTopTen());
+
+        StateHasChanged();
     }
 
     public async void GetTopHitByMonth()
     {
         ExcuseService _excuseService = new ExcuseService();
         excuseList = await Task.Run(() => _excuseService.GetTopHitByMonth());
+        
+        StateHasChanged();
     }
 
     public async void GetTopHitByYear()
     {
         ExcuseService _excuseService = new ExcuseService();
         excuseList = await Task.Run(() => _excuseService.GetTopHitByYear());
+
+        StateHasChanged();
     }
 
     public void addVote(Excuse excuse)
@@ -137,7 +165,7 @@
         VoteService _voteService = new VoteService();
         Vote newVote = new Vote();
         newVote.idExcuse = excuse.Id;
-        newVote.idUser = 1;
+        newVote.idUser = _currentUserId;
         _voteService.AddVote(newVote);
 
         //+1 au nombre de vote actuel
@@ -145,6 +173,9 @@
 
         //On change la couleur du coeur
         excuseList.First(e => e.Id == excuse.Id).Voted = true;
+
+        //On rajoute le vote dans la liste des votes
+        voteList.Add(newVote);
 
     }
 }

@@ -16,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using FrontBlazor.Areas.Identity;
 using FrontBlazor.Data;
 using Blazor.FileReader;
+using Microsoft.AspNetCore.ProtectedBrowserStorage;
 
 namespace FrontBlazor
 {
@@ -44,6 +45,7 @@ namespace FrontBlazor
             services.AddSingleton<ExcuseService>();
             services.AddSingleton<VoteService>();
             services.AddFileReaderService();
+            services.AddProtectedBrowserStorage();
             services.AddServerSideBlazor().AddHubOptions(o =>
             {
                 o.MaximumReceiveMessageSize = 10 * 1024 * 1024; // 10MB

@@ -1,4 +1,5 @@
 ﻿<StaticWebAssets Version="1.0">
   <ContentRoot BasePath="/Identity" Path="C:\Users\Axel8\.nuget\packages\microsoft.aspnetcore.identity.ui\3.1.1\staticwebassets\V4" />
+  <ContentRoot BasePath="_content/Microsoft.AspNetCore.ProtectedBrowserStorage" Path="C:\Users\Axel8\.nuget\packages\microsoft.aspnetcore.protectedbrowserstorage\0.1.0-alpha.19521.1\build\..\staticwebassets\" />
   <ContentRoot BasePath="_content/Tewr.Blazor.FileReader" Path="C:\Users\Axel8\.nuget\packages\tewr.blazor.filereader\1.3.0.20041\build\..\staticwebassets\" />
 </StaticWebAssets>

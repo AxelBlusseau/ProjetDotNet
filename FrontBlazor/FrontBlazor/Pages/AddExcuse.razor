@@ -2,41 +2,59 @@
 @using FrontBlazor.Data
 @using System.IO;
 @using Blazor.FileReader
+@using Microsoft.AspNetCore.ProtectedBrowserStorage;
+@inject ProtectedSessionStorage ProtectedSessionStore
 @inject IFileReaderService fileReaderService;
 @inject NavigationManager NavigationManager
 
-    <div class="container">
-            <div class="row">
-                <div class="col">
-                    <h1>Rédiger une excuse</h1>
+<NavMenu />
+
+<section class="testimonial py-5" id="testimonial">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 py-5 bg-primary text-white text-center ">
+                <div class=" ">
+                    <div class="card-body">
+                        <img src="http://www.ansonika.com/mavia/img/registration_bg.svg" style="width:30%">
+                        <h2 class="py-3">Votre excuse</h2>
+                        <p>
+                            J'espère que vous avez une bonne raison !
+                        </p>
+                    </div>
                 </div>
             </div>
-        <div class="row justify-content-center">
-            <div class="card" style="padding: 10px">
-                <form>
-                    <EditForm Model="@excuse" OnValidSubmit="SaveExcuse">
+            <div class="col-md-8 py-5">
+                <div class="h-100">
+                    <h4 class="pb-4">Merci de remplir ce formulaire</h4>
+                    <form>
+                        <EditForm Model="@excuse" OnValidSubmit="SaveExcuse">
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <textarea class="form-control" @bind="excuse.Reason" required placeholder="Raison" />
+                                </div>
+                            </div>                            
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <input type="file" class="btn btn-primary" @onchange="@UploadFile" @ref="fileUpload" id="fileUpload" />
+                                </div>
+                            </div>
 
-                        <div class="form-group">
-                            <textarea class="form-control" @bind="excuse.Reason" required placeholder="Raison" />
-                        </div>
-                        <br />
-                        <div class="form-group">
-                            <input type="file" class="btn btn-primary" @onchange="@UploadFile" @ref="fileUpload" id="fileUpload" />
-                        </div>
+                            <div class="form-row">
+                                <input type="submit" class="btn btn-primary" value="S'excuser" />
+                            </div>
 
-                        <div class="form-group">
-                            <input type="submit" class="btn btn-primary" value="Publier" />
-                        </div>
-
-                    </EditForm>
-                </form>
+                        </EditForm>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-    
+</section>
+
 
 @code {
     public Excuse excuse { get; set; }
+    public int _currentUserId { get; set; }
 
     ElementReference fileUpload;
     string imageData = String.Empty;
@@ -56,16 +74,22 @@
     {
         ExcuseService _excuseService = new ExcuseService();
         excuse.Date = DateTime.Now;
-        excuse.UserID = 1;
+        excuse.UserID = _currentUserId;
         excuse.Image = imageData;
-        System.Diagnostics.Debug.Print("OUI" + excuse.Image.ToString());
         _excuseService.AddExcuse(excuse);
-        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/home");
     }
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
-        excuse = new Excuse();
+                    excuse = new Excuse();
+
+        //Permission
+        _currentUserId = await ProtectedSessionStore.GetAsync<int>("id");
+        if (_currentUserId == 0)
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 
 }

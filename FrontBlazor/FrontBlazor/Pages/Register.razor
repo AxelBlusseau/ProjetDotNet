@@ -1,0 +1,80 @@
+﻿@page "/register"
+@using FrontBlazor.Data
+@using Microsoft.AspNetCore.ProtectedBrowserStorage;
+@inject ProtectedSessionStorage ProtectedSessionStore
+@inject NavigationManager NavigationManager
+
+<section class="testimonial py-5" id="testimonial">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 py-5 bg-primary text-white text-center ">
+                <div class=" ">
+                    <div class="card-body">
+                        <img src="http://www.ansonika.com/mavia/img/registration_bg.svg" style="width:30%">
+                        <h2 class="py-3">Inscription</h2>
+                        <p>
+                            Cette application regroupe les meilleurs excuses de retard de ton campus, inscrit toi pour pouvoir rédiger toi même tes excuses et votes pour tes préférées !
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 py-5">
+                <div class="h-100">
+                    <h4 class="pb-4">Merci de remplir ce formulaire</h4>
+                    <form>
+                        <EditForm Model="@user" OnValidSubmit="SaveUser">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <input class="form-control" type="email" @bind="user.Mail" required placeholder="Mail" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <input type="password" class="form-control" @bind="user.Password" required placeholder="Mot de passe" />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <select class="form-control" @bind="user.Grade" placeholder="Classe" required>
+                                        <option></option>
+                                        <option value="B1">B1</option>
+                                        <option value="B2">B2</option>
+                                        <option value="B3">B3</option>
+                                        <option value="I4">I4</option>
+                                        <option value="I5">I5</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <input type="submit" class="btn btn-primary" value="S'inscrire" />
+                            </div>
+
+                        </EditForm>
+                    </form>
+                </div>
+
+                <div>
+                    <a href="/" style="position:absolute; bottom: 0; right: 20px;" class="btn btn-primary">Connexion</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@code {
+    public User user { get; set; }
+
+    private async void SaveUser()
+    {
+        UserService _userService = new UserService();
+        User result = await Task.Run(() => _userService.AddUser(user));
+        await ProtectedSessionStore.SetAsync("id", result.Id);
+        NavigationManager.NavigateTo("/home");
+    }
+
+    protected override void OnInitialized()
+    {
+        user = new User();
+    }
+
+}
